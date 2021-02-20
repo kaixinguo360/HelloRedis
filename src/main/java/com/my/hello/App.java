@@ -1,7 +1,6 @@
 package com.my.hello;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import redis.clients.jedis.Jedis;
 
 import java.util.ResourceBundle;
@@ -10,16 +9,15 @@ import java.util.stream.Collectors;
 /**
  * Hello Redis!
  */
+@Log4j2
 public class App  {
-
-    private static final Logger logger = LogManager.getLogger(App.class);
 
     public static void main( String[] args )  {
 
-        logger.info("Hello Redis!");
+        log.info("Hello Redis!");
 
         ResourceBundle resource = ResourceBundle.getBundle("my-config");
-        logger.debug(() -> "Current config file:\n" + resource.keySet().stream()
+        log.debug(() -> "Current config file:\n" + resource.keySet().stream()
                 .map(key -> key + " = " + resource.getString(key))
                 .collect(Collectors.joining("\n")));
 
