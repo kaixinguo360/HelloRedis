@@ -2,6 +2,7 @@ package com.my.hello;
 
 import lombok.extern.log4j.Log4j2;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -21,13 +22,16 @@ public class App  {
                 .map(key -> key + " = " + resource.getString(key))
                 .collect(Collectors.joining("\n")));
 
-        Jedis jedis = new Jedis(
+        JedisPool jedisPool = new JedisPool(
                 resource.getString("redis.host"),
                 Integer.parseInt(resource.getString("redis.port"))
         );
+        log.info("JedisPool Created");
 
-        System.out.print("Ping... ");
-        System.out.flush();
-        System.out.println(jedis.ping("OK"));
+        try (Jedis jedis = jedisPool.getResource()) {
+            System.out.print("Ping... ");
+            System.out.flush();
+            System.out.println(jedis.ping("OK"));
+        }
     }
 }
